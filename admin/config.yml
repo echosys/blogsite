@@ -2,9 +2,9 @@ backend:
   name: github
   repo: echosys/blogsite
   branch: main
-  auth_endpoint: https://intriguing-snow-elm.glitch.me/ # Point to your OAuth proxy
+  site_domain: peppy-lollipop-07381c.netlify.app
 
-media_folder: "images/uploads"
+media_folder: "img/uploads" # Folder where user uploaded files should go
 
 collections:
   - name: "blog" # Used in routes, e.g., /admin/collections/blog
