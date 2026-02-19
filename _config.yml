@@ -1,0 +1,60 @@
+# Site settings
+title: "Arman's Tech Blog"
+description: "My Experiences & Notes on Coding, Software Engineering, AI and Technology"
+url: "https://www.armannotes.com"
+baseurl: "" # the subpath of your site, e.g. /blog
+author:
+  name: "Arman"
+  avatar: "/img/me.jpg"
+  bio: "a Software Consultant, .NET Full-stack Dev, Solution Architect, Team Lead and blogger with 15+ years of experience, currently working as a software consultant in Australia."
+  location: "Australia"
+  links:
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/programmerByDay"
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/armannaj"
+
+# Build settings
+remote_theme: "mmistakes/minimal-mistakes"
+minimal_mistakes_skin: "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "sunrise"
+
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-gist
+  - jekyll-include-cache
+  - jekyll-admin
+
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /:year/:month/:day/:title/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "single"
+      author_profile: true
+      read_time: true
+      comments: true
+      share: true
+      related: true
+
+# Exclusion
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - netlify.toml
+  - index.html # Exclude built html if we transition to index.md
+  - about/index.html
