@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://www.armannotes.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://www.armannotes.com/" rel="alternate" type="text/html" /><updated>2024-10-17T05:37:02+00:00</updated><id>https://www.armannotes.com/feed.xml</id><title type="html">Arman’s Tech Blog</title><subtitle>My Experiences &amp; Notes on Coding, Software Engineering, AI and Technology</subtitle><author><name>Arman</name></author><entry><title type="html">How I Solved “Yjs was already imported” and “document is not defined” Errors in Remirror 2, Nextjs 14.2</title><link href="https://www.armannotes.com/2024/05/23/document-not-defined-error/" rel="alternate" type="text/html" title="How I Solved “Yjs was already imported” and “document is not defined” Errors in Remirror 2, Nextjs 14.2" /><published>2024-05-23T00:00:00+00:00</published><updated>2024-05-23T00:00:00+00:00</updated><id>https://www.armannotes.com/2024/05/23/document-not-defined-error</id><content type="html" xml:base="https://www.armannotes.com/2024/05/23/document-not-defined-error/"><![CDATA[<p>So I’m using Remirror 2 editor in a React component in a Nextjs app.</p>
+
+<p>I realised that every time I opened the page containing that editor component, it would give me HTTP 500 error and the following error messages:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">Yjs</span> <span class="nx">was</span> <span class="nx">already</span> <span class="nx">imported</span><span class="p">.</span> <span class="nx">This</span> <span class="nx">breaks</span> <span class="kd">constructor</span> <span class="nx">checks</span> <span class="nx">and</span> <span class="nx">will</span> <span class="nx">lead</span> <span class="nx">to</span> <span class="nx">issues</span><span class="o">!</span> <span class="o">-</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//github.com/yjs/yjs/issues/438</span>
+
+ <span class="err">⨯</span> <span class="nx">Internal</span> <span class="nx">error</span><span class="p">:</span> <span class="nx">ReferenceError</span><span class="p">:</span> <span class="nb">document</span> <span class="nx">is</span> <span class="nx">not</span> <span class="nx">defined</span>
+</code></pre></div></div>
+
+<p>Sometimes I was getting a different error, the error was this:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">Error</span><span class="p">:</span> <span class="nx">Unable</span> <span class="nx">to</span> <span class="nx">retrieve</span> <span class="nx">the</span> <span class="nb">document</span> <span class="k">from</span> <span class="nx">the</span> <span class="nb">global</span> <span class="nx">scope</span><span class="p">.</span> 
+<span class="nx">It</span> <span class="nx">seems</span> <span class="nx">that</span> <span class="nx">you</span> <span class="nx">are</span> <span class="nx">running</span> <span class="nx">Remirror</span> <span class="k">in</span> <span class="nx">a</span> <span class="nx">non</span><span class="o">-</span><span class="nx">browser</span> <span class="nx">environment</span><span class="p">.</span> <span class="nx">Remirror</span> <span class="nx">need</span> <span class="nx">browser</span> <span class="nx">APIs</span> <span class="nx">to</span> <span class="nx">work</span><span class="p">.</span> 
+<span class="nx">If</span> <span class="nx">you</span> <span class="nx">are</span> <span class="nx">using</span> <span class="nx">Jest</span> <span class="p">(</span><span class="nx">or</span> <span class="nx">other</span> <span class="nx">testing</span> <span class="nx">frameworks</span><span class="p">),</span> <span class="nx">make</span> <span class="nx">sure</span> <span class="nx">that</span> <span class="nx">you</span> <span class="nx">are</span> <span class="nx">using</span> <span class="nx">the</span> <span class="nx">JSDOM</span> <span class="nx">environment</span> <span class="p">(</span><span class="nx">https</span><span class="p">:</span><span class="c1">//jestjs.io/docs/29.0/configuration#testenvironment-string). </span>
+<span class="nx">If</span> <span class="nx">you</span> <span class="nx">are</span> <span class="nx">using</span> <span class="nx">Next</span><span class="p">.</span><span class="nx">js</span> <span class="p">(</span><span class="nx">or</span> <span class="nx">other</span> <span class="nx">server</span><span class="o">-</span><span class="nx">side</span> <span class="nx">rendering</span> <span class="nx">frameworks</span><span class="p">),</span> <span class="nx">please</span> <span class="nx">use</span> <span class="nx">dynamic</span> <span class="k">import</span> <span class="kd">with</span> <span class="s2">`ssr: false`</span> <span class="nx">to</span> <span class="nx">load</span> <span class="nx">the</span> <span class="nx">editor</span> <span class="nx">component</span> <span class="nx">without</span> <span class="nx">rendering</span> <span class="nx">it</span> <span class="nx">on</span> <span class="nx">the</span> <span class="nx">server</span> <span class="p">(</span><span class="nx">https</span><span class="p">:</span><span class="c1">//nextjs.org/docs/advanced-features/dynamic-import#with-no-ssr). </span>
+<span class="nx">If</span> <span class="nx">you</span> <span class="nx">are</span> <span class="nx">using</span> <span class="nx">Node</span><span class="p">.</span><span class="nx">js</span><span class="p">,</span> <span class="nx">you</span> <span class="nx">can</span> <span class="nx">install</span> <span class="nx">JSDOM</span> <span class="nx">and</span> <span class="nx">Remirror</span> <span class="nx">will</span> <span class="k">try</span> <span class="nx">to</span> <span class="nx">use</span> <span class="nx">it</span> <span class="nx">automatically</span><span class="p">,</span> <span class="nx">or</span> <span class="nx">you</span> <span class="nx">can</span> <span class="nx">create</span> <span class="nx">a</span> <span class="nx">fake</span> <span class="nb">document</span> <span class="nx">and</span> <span class="nx">pass</span> <span class="nx">it</span> <span class="nx">to</span> <span class="nx">Remirror</span>
+</code></pre></div></div>
+
+<p>It even stopped search engines (like Google and Bing) to index that page (<a href="https://www.jekyllpad.com/tools/online-markdown-wysiwyg-editor">online markdown editor</a>) on my projects.</p>
+
+<h2 id="investigation-and-debugging">Investigation and Debugging</h2>
+
+<p>I read a lot and got some clues from <a href="https://github.com/yjs/yjs/issues/438">here</a> and <a href="https://github.com/remirror/remirror/discussions/2095">here</a>. Unfortunately those didn’t help me.</p>
+
+<p>I decided to investigate the stack trace to be able to find where it is throwing those errors.</p>
+
+<p>That pointed me to the function in my code that was originating this error. I realised that, that function was a custom React hook I built. It wasn’t in the React component, but in the React hook i custom-built to use with my component.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">function</span> <span class="nx">useContentEditor</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">/// some stuff</span>
+
+<span class="kd">const</span> <span class="nx">visualEditorManager</span> <span class="o">=</span> <span class="nx">useRemirror</span><span class="p">({</span>
+    <span class="na">extensions</span><span class="p">:</span> <span class="nx">visualEditorExtensions</span><span class="p">,</span>
+    <span class="na">stringHandler</span><span class="p">:</span> <span class="nx">visualEditorStringHandler</span><span class="p">,</span>
+    <span class="na">content</span><span class="p">:</span> <span class="nx">value</span><span class="p">,</span>
+    <span class="na">selection</span><span class="p">:</span> <span class="dl">"</span><span class="s2">start</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">});</span>
+
+  <span class="kd">const</span> <span class="nx">sourceEditorManager</span> <span class="o">=</span> <span class="nx">useRemirror</span><span class="p">({</span>
+    <span class="na">extensions</span><span class="p">:</span> <span class="nx">sourceEditorExtensions</span><span class="p">,</span>
+    <span class="na">content</span><span class="p">:</span> <span class="nx">value</span><span class="p">,</span>
+    <span class="na">stringHandler</span><span class="p">:</span> <span class="dl">"</span><span class="s2">html</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">});</span>
+
+<span class="c1">// some other stuff</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This helped me to put the puzzle pieces together, Nextjs was rendering this client-side React hook and components on the server before sending it to client. Obviously there is no browser or document available on the server, therefore it was throwing that.</p>
+
+<p>I found 2 solutions to this, I’ll share them.</p>
+
+<h2 id="solution-1---nextjs-dynamic-component-load">Solution 1 - Nextjs Dynamic Component Load</h2>
+
+<p>As it is stated in the error message, I could use the <a href="https://nextjs.org/docs/pages/building-your-application/optimizing/lazy-loading#with-no-ssr">recommended dynamic component load</a> by Nextjs. In order to do that, I put this import at the top of the component file:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">dynamic</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">next/dynamic</span><span class="dl">"</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">DynamicRemirror</span> <span class="o">=</span> <span class="nx">dynamic</span><span class="p">(</span>
+  <span class="p">()</span> <span class="o">=&gt;</span> <span class="k">import</span><span class="p">(</span><span class="dl">"</span><span class="s2">@remirror/react</span><span class="dl">"</span><span class="p">).</span><span class="nx">then</span><span class="p">((</span><span class="nx">mod</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">mod</span><span class="p">.</span><span class="nx">Remirror</span><span class="p">),</span>
+  <span class="p">{</span> <span class="na">ssr</span><span class="p">:</span> <span class="kc">false</span> <span class="p">}</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<p>then, instead of using <code class="language-plaintext highlighter-rouge">&lt;Remirror&gt;</code> tag, I used <code class="language-plaintext highlighter-rouge">&lt;DynamicRemirror&gt;</code> everywhere in that component.</p>
+
+<p>and the error was gone! Voila!</p>
+
+<h2 id="solution-2---detect-server-side-rendering">Solution 2 - Detect Server Side Rendering</h2>
+
+<p>For those who cannot use the solution above, there is a NPM package called <code class="language-plaintext highlighter-rouge">React Aria</code> .</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">npm</span> <span class="nx">i</span> <span class="nx">react</span><span class="o">-</span><span class="nx">aria</span>
+</code></pre></div></div>
+
+<p>It has a React hook called <code class="language-plaintext highlighter-rouge">useIsSSR</code></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">useIsSSR</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@react-aria/ssr</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>and then, in your component before returning any JSX or TSX, put this code:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">isServer</span> <span class="o">=</span> <span class="nx">useIsSSR</span><span class="p">();</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">isServer</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">isServer</span><span class="dl">"</span><span class="p">,</span> <span class="nx">isServer</span><span class="p">);</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This will make sure that when Nextjs is rendering your component on the server, it doesn’t initialize Remirror components, therefore there won’t be any HTTP 500 errors.</p>
+
+<p>There you go!</p>
+
+<p>Thanks for reading.</p>]]></content><author><name>Arman</name></author><category term="nextjs" /><category term="react" /><category term="reactjs" /><category term="typescript" /><summary type="html"><![CDATA[So I’m using Remirror 2 editor in a React component in a Nextjs app.]]></summary></entry><entry><title type="html">How I Created My Own Background Jobs Server At Home in TypeScript</title><link href="https://www.armannotes.com/2024/05/03/background-jobs-server-typescript/" rel="alternate" type="text/html" title="How I Created My Own Background Jobs Server At Home in TypeScript" /><published>2024-05-03T00:00:00+00:00</published><updated>2024-05-03T00:00:00+00:00</updated><id>https://www.armannotes.com/2024/05/03/background-jobs-server-typescript</id><content type="html" xml:base="https://www.armannotes.com/2024/05/03/background-jobs-server-typescript/"><![CDATA[<p>There are very good cloud services available to create background jobs in Nextjs serverless environments (such as Vercel or Netlify), however, they have a big problem. There is a function timeout on each call and therefore you cannot have long-running background jobs in there.</p>
+
+<p>That’s why I decide to start my own background jobs server, but with a totally new approach. I wanted it use the same code but extract the job functions and run them in a docker container. It can be easily run on an old laptop or home PC.</p>
+
+<h2 id="1-define-job-functions">1. Define job functions</h2>
+
+<p>I checked and compared multiple npm packages and decided to use <code class="language-plaintext highlighter-rouge">Cron</code> npm package for job functions. To install it,</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">npm</span> <span class="nx">i</span> <span class="nx">cron</span>
+</code></pre></div></div>
+
+<p>Cron npm package, lets me to define functions and assign cron time string to run them. Therefore, it’s a great choice for me.</p>
+
+<p>Then, create a folder in your code called <code class="language-plaintext highlighter-rouge">worker</code>, and inside that create a file called <code class="language-plaintext highlighter-rouge">run-jobs.ts</code></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// run-jobs.ts</span>
+
+<span class="k">import</span> <span class="p">{</span> <span class="nx">CronJob</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">cron</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="kd">const</span> <span class="nx">mySpecialFunction</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Function Started!</span><span class="dl">"</span><span class="p">);</span>
+
+  <span class="kd">const</span> <span class="nx">job1</span> <span class="o">=</span> <span class="nx">CronJob</span><span class="p">.</span><span class="k">from</span><span class="p">({</span>
+    <span class="na">cronTime</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0 */2 * * *</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">onTick</span><span class="p">:</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`job1 started at </span><span class="p">${</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">toLocaleString</span><span class="p">()}</span><span class="s2">`</span><span class="p">);</span>
+
+    <span class="c1">/// DO WHATEVER YOU WANT TO DO HERE      </span>
+
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`job1 finished at </span><span class="p">${</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">toLocaleString</span><span class="p">()}</span><span class="s2">`</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="na">onComplete</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">job1 ended</span><span class="dl">"</span><span class="p">),</span>
+    <span class="na">start</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="na">timeZone</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Australia/Sydney</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="p">(</span><span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Worker Started!</span><span class="dl">"</span><span class="p">);</span>
+  <span class="k">await</span> <span class="nx">mySpecialFunction</span><span class="p">();</span>
+<span class="p">})();</span>
+</code></pre></div></div>
+
+<p>Now, you have a file that starts a function. You can define as many functions you want here, each with a different cron time string.</p>
+
+<p>To learn more about how cron functions are defined take a look <a href="https://www.npmjs.com/package/cron">here</a></p>
+
+<p>To learn more about how cron time string should be defined, use this <a href="https://crontab.guru/">crontab.guru tool</a></p>
+
+<h2 id="2-extract-functions-code-using-webpack">2. Extract functions code using Webpack</h2>
+
+<p>In order to run functions in a docker container, first I needed to extract them out of the code. There is no need to include all the codebase into the docker container. This way, your container will be as small as possible and can be run on a small Laptop or PC at home easily.</p>
+
+<p>In order to use Webpack, first we need to install it:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">npm</span> <span class="nx">install</span> <span class="o">--</span><span class="nx">save</span><span class="o">-</span><span class="nx">dev</span> <span class="nx">webpack</span>
+</code></pre></div></div>
+
+<p>You also need to install ts-loader package to be able to use typescript files in webpack:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">npm</span> <span class="nx">install</span> <span class="o">--</span><span class="nx">save</span><span class="o">-</span><span class="nx">dev</span> <span class="nx">ts</span><span class="o">-</span><span class="nx">loader</span>
+</code></pre></div></div>
+
+<p>Then, inside your worker folder, create a file called <em>webpack.config.js :</em></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">path</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">mode</span><span class="p">:</span> <span class="dl">"</span><span class="s2">development</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">entry</span><span class="p">:</span> <span class="dl">'</span><span class="s1">./run-jobs.ts</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">module</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">rules</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">tsx</span><span class="se">?</span><span class="sr">$/</span><span class="p">,</span>
+        <span class="na">use</span><span class="p">:</span> <span class="dl">'</span><span class="s1">ts-loader</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">exclude</span><span class="p">:</span> <span class="sr">/node_modules/</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+  <span class="na">resolve</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">alias</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">'</span><span class="s1">@</span><span class="dl">'</span><span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">'</span><span class="s1">../src/</span><span class="dl">'</span><span class="p">),</span>
+      <span class="p">},</span>
+    <span class="na">extensions</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">.tsx</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">.ts</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">.js</span><span class="dl">'</span><span class="p">],</span>
+  <span class="p">},</span>
+  <span class="na">output</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">filename</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bundle.js</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">path</span><span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">'</span><span class="s1">dist</span><span class="dl">'</span><span class="p">),</span>
+  <span class="p">},</span>
+  <span class="na">target</span><span class="p">:</span> <span class="dl">'</span><span class="s1">node</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// Important for Node.js specific modules</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>In this config file, we are telling webpack to start from ‘run-jobs.ts’ file from current folder path. It tried to extract the code (with all their dependencies) into a bundle or package defined in the ‘output’ section.</p>
+
+<p>We added ts-loader plugin for webpack, so that it can work with Typescript files. Also, if you are using ‘@’ in your import paths, you need to define where this ‘@’ refers to. This is what I did in ‘alias’ section.</p>
+
+<p>You can test this easily with running this command in your worker folder:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">npx</span> <span class="nx">webpack</span>
+</code></pre></div></div>
+
+<p>This should start webpack and based on the config we defined, extract the code require to run jobs and bundle them into a .js file called bundle.js in a folder called ‘dist’.</p>
+
+<h2 id="3-defining-docker-container">3. Defining Docker Container</h2>
+
+<p>Creating a docker container is easy now since everything is ready. First create a file called ‘Dockerfile’ in worker folder:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">FROM</span> <span class="nx">node</span><span class="p">:</span><span class="mf">18.19</span><span class="p">.</span><span class="mi">0</span>
+
+<span class="nx">WORKDIR</span> <span class="o">/</span><span class="nx">app</span>
+
+<span class="nx">COPY</span> <span class="nx">node_modules</span><span class="o">/</span> <span class="p">.</span><span class="o">/</span><span class="nx">node_modules</span>
+
+<span class="nx">COPY</span> <span class="nx">dist</span><span class="cm">/* .
+
+CMD ["node", "bundle.js"]
+</span></code></pre></div></div>
+
+<p>This file tells docker on what to do in order to create the docker container to run jobs. Remember that you cannot access any file outside of this folder in Dockerfile.</p>
+
+<h2 id="4-run-it">4. Run it!</h2>
+
+<p>Now, it’s time to put everything together, create the docker and run it for the first time. Create a bash file called ‘build-and-run.sh’ and put these command in it:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">rm</span> <span class="o">-</span><span class="nx">rf</span> <span class="nx">dist</span>
+<span class="nx">rm</span> <span class="o">-</span><span class="nx">rf</span> <span class="nx">node_modules</span>
+
+<span class="p">(</span><span class="nx">cd</span> <span class="p">..</span> <span class="o">&amp;&amp;</span> <span class="nx">npm</span> <span class="nx">i</span><span class="p">)</span>
+<span class="p">(</span><span class="nx">cd</span> <span class="p">..</span> <span class="o">&amp;&amp;</span> <span class="nx">cp</span> <span class="o">-</span><span class="nx">r</span> <span class="nx">node_modules</span> <span class="nx">worker</span><span class="p">)</span>
+
+<span class="nx">npx</span> <span class="nx">webpack</span>
+
+<span class="nx">docker</span> <span class="nx">build</span> <span class="o">-</span><span class="nx">t</span> <span class="nx">my</span><span class="o">-</span><span class="nx">jobs</span><span class="o">-</span><span class="nx">img</span> <span class="p">.</span>
+
+<span class="nx">docker</span> <span class="nx">run</span> <span class="o">--</span><span class="nx">detach</span> <span class="o">--</span><span class="nx">rm</span> <span class="o">--</span><span class="nx">env</span><span class="o">-</span><span class="nx">file</span> <span class="p">.</span><span class="nx">env</span> <span class="o">--</span><span class="nx">name</span> <span class="nx">my</span><span class="o">-</span><span class="nx">jobs</span> <span class="nx">my</span><span class="o">-</span><span class="nx">jobs</span><span class="o">-</span><span class="nx">img</span>
+</code></pre></div></div>
+
+<p>Couple of points:</p>
+
+<ul>
+  <li>
+    <p>You need to do npm install first so that all dependencies already exist before you run Webpack. Webpack expects to have access to all node_modules when you run it.</p>
+  </li>
+  <li>
+    <p>Docker cannot copy node_modules from outside folders, therefore I copy node_modules from upper-folder into this folder first.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">Docker Build</code> runs docker based on the Dockerfile we created before and creates the docker image for us.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">Docker Run</code> starts the docker in detach mode. Note that I copied my env file and referencing it to the docker container. This way all your environment variables will be available inside the container.</p>
+  </li>
+  <li>
+    <p>I like to use <code class="language-plaintext highlighter-rouge">--rm</code> so that when the container is finished/stopped, docker automatically deletes it, so that there is no name conflict in future runs.</p>
+  </li>
+</ul>
+
+<h2 id="5-run-it-at-home">5. Run It At Home</h2>
+
+<p>I’m not recommending it, but if you want to run it at home on an old laptop/pc, you just need to install docker on it, pull the code base on it, and run this shell script on it.</p>
+
+<p>Voila, now you can have infinite number of jobs defined and you won’t be bounded by Vercel serverless function timeout or any other platform :)</p>
+
+<p>Let me know what you think about it, you can find me on <a href="https://twitter.com/programmerByDay">Twitter (X) here</a></p>]]></content><author><name>Arman</name></author><category term="typescript" /><category term="nodejs" /><category term="nextjs" /><category term="react" /><summary type="html"><![CDATA[There are very good cloud services available to create background jobs in Nextjs serverless environments (such as Vercel or Netlify), however, they have a big problem. There is a function timeout on each call and therefore you cannot have long-running background jobs in there.]]></summary></entry><entry><title type="html">How I setup .NET Core 3.1 on Mac M1/M2 with JetBrains Rider IDE</title><link href="https://www.armannotes.com/2024/04/23/net-core-3-mac-m1-m2-rider/" rel="alternate" type="text/html" title="How I setup .NET Core 3.1 on Mac M1/M2 with JetBrains Rider IDE" /><published>2024-04-23T00:00:00+00:00</published><updated>2024-04-23T00:00:00+00:00</updated><id>https://www.armannotes.com/2024/04/23/net-core-3-mac-m1-m2-rider</id><content type="html" xml:base="https://www.armannotes.com/2024/04/23/net-core-3-mac-m1-m2-rider/"><![CDATA[<p>I recently started working on a project which is using .NET Core 3.1.</p>
+
+<p>As I am the only developer in the team using Mac, and as you may know, .NET Core 3.1 does not support Mac M1/M2 cpus, I faced lots of issues setting up my local environment.</p>
+
+<p>Here is the things I did, hopefully it helps you as well:</p>
+
+<h2 id="1-make-sure-rosetta-is-installed">1. Make sure Rosetta is installed</h2>
+
+<p>Rosetta is an Apple’s tool that allows you to run x64 applications on Mac silicon CPUs.</p>
+
+<p>If you need to install it, take a look at this page on Apple website <a href="https://support.apple.com/en-au/102527">here</a>.</p>
+
+<h2 id="2-install-net-core-31">2. Install .NET Core 3.1</h2>
+
+<p><a href="https://dotnet.microsoft.com/en-us/download/dotnet/3.1">Here</a> you can find the latest versions of it, install the version that suits you.</p>
+
+<p>Apple will automatically runs it with Rosetta, whenever it is run.</p>
+
+<h2 id="3-settings-in-jetbrains-rider">3. Settings in Jetbrains Rider</h2>
+
+<p>There are some settings you need to do, first:</p>
+
+<ol>
+  <li>
+    <p>Go to Settings &gt; Build, Execution &amp; Deployment &gt; Tools and Build</p>
+  </li>
+  <li>
+    <p>Select .NET CLI path and MSBuild version to /usr/local/share/dotnet/x64/dotnet (or any other path you installed it), and save it.</p>
+  </li>
+  <li>
+    <p>Open a new terminal</p>
+  </li>
+  <li>
+    <p>open file /etc/paths (probably you need to do it as a root)</p>
+  </li>
+  <li>
+    <p>add this line to it ‘/usr/local/share/dotnet/x64/dotnet’</p>
+  </li>
+</ol>
+
+<p>Save, and restart your IDE.</p>
+
+<p>Now it should be able to open and run it.</p>]]></content><author><name>Arman</name></author><category term="net-core" /><category term="dotnet-core" /><summary type="html"><![CDATA[I recently started working on a project which is using .NET Core 3.1.]]></summary></entry><entry><title type="html">How I Solved “Can’t resolve ‘zlib-sync’” error Using Discord.js sdk in Next.js 14.1 Server Actions</title><link href="https://www.armannotes.com/2024/02/12/zlib-error-nextjs-server-actions/" rel="alternate" type="text/html" title="How I Solved “Can’t resolve ‘zlib-sync’” error Using Discord.js sdk in Next.js 14.1 Server Actions" /><published>2024-02-12T00:00:00+00:00</published><updated>2024-02-12T00:00:00+00:00</updated><id>https://www.armannotes.com/2024/02/12/zlib-error-nextjs-server-actions</id><content type="html" xml:base="https://www.armannotes.com/2024/02/12/zlib-error-nextjs-server-actions/"><![CDATA[<p>I started a new Nextjs project (Nextjs 14.1.0). I added <code class="language-plaintext highlighter-rouge">discord.js</code> to be able send a message to a discord channel.</p>
+
+<p>I decided to give Nextjs server actions a go, therefore I created a separate file for this action:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// lib/actions.ts</span>
+
+<span class="dl">"</span><span class="s2">use server</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Client</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">discord.js</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="k">async</span> <span class="kd">function</span> <span class="nx">create</span><span class="p">(</span><span class="nx">formDate</span><span class="p">:</span> <span class="nx">FormData</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="kd">const</span> <span class="nx">discordClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Client</span><span class="p">({</span>
+    <span class="na">intents</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">GuildMessages</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Guilds</span><span class="dl">"</span><span class="p">],</span>
+  <span class="p">});</span>
+  <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">discordClient</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="dl">"</span><span class="s2">// login token</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Then, I created a simple html form to use this action as the form action there:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// app/page.tsx</span>
+<span class="dl">"</span><span class="s2">use client</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">create</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@/lib/actions</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="kd">function</span> <span class="nx">Home</span><span class="p">()</span> <span class="p">{</span>
+
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="o">&lt;</span><span class="nx">main</span> <span class="nx">className</span><span class="o">=</span><span class="dl">"</span><span class="s2">flex min-h-screen flex-col items-center justify-between p-24</span><span class="dl">"</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nx">form</span> <span class="nx">action</span><span class="o">=</span><span class="p">{</span><span class="nx">create</span><span class="p">}</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="sr">/form</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="sr">/main</span><span class="err">&gt;
+</span>  <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>very simple, yeah?</p>
+
+<p>But immediately, I got this error:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="err">⨯</span> <span class="p">.</span><span class="o">/</span><span class="nx">node_modules</span><span class="o">/</span><span class="p">@</span><span class="nd">discordjs</span><span class="sr">/ws/</span><span class="nx">dist</span><span class="o">/</span><span class="nx">index</span><span class="p">.</span><span class="nx">js</span><span class="p">:</span><span class="mi">561</span><span class="p">:</span><span class="mi">53</span>
+<span class="nx">Module</span> <span class="nx">not</span> <span class="nx">found</span><span class="p">:</span> <span class="nx">Can</span><span class="dl">'</span><span class="s1">t resolve </span><span class="dl">'</span><span class="nx">zlib</span><span class="o">-</span><span class="nx">sync</span><span class="dl">'</span><span class="s1">
+</span></code></pre></div></div>
+
+<p>I think this is happening because Webpack is trying to include <code class="language-plaintext highlighter-rouge">discordjs</code> in client-side code (which it shouldn’t). I spent many hours trying to google and asking ChatGPT and CoPilot ai, but wasn’t successful.</p>
+
+<p>Finally, I was able to solve it with this. First I had to install these packages:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">npm</span> <span class="nx">install</span> <span class="nx">zlib</span><span class="o">-</span><span class="nx">sync</span> <span class="nx">node</span><span class="o">-</span><span class="nx">loader</span> <span class="o">--</span><span class="nx">save</span><span class="o">-</span><span class="nx">dev</span>
+</code></pre></div></div>
+
+<p>zlib uses <code class="language-plaintext highlighter-rouge">.node</code> files, and webpack doesn’t know how to deal with those files. Therefore I had to install <em>node-loader</em> and configure it in webpack settings in <em>next.config</em> file.</p>
+
+<p>Added this section in <em>next.config.mjs</em> file:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">nextConfig</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">webpack</span><span class="p">:</span> <span class="p">(</span><span class="nx">config</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nx">config</span><span class="p">.</span><span class="nx">module</span><span class="p">.</span><span class="nx">rules</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+          <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">node/</span><span class="p">,</span>
+          <span class="na">use</span><span class="p">:</span> <span class="dl">'</span><span class="s1">node-loader</span><span class="dl">'</span>
+        <span class="p">})</span>
+     
+        <span class="k">return</span> <span class="nx">config</span>
+      <span class="p">},</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>Now the problem is solved. I couldn’t find this answer anywhere else, and it took me hours to figure it out, so I decided to share it here.</p>]]></content><author><name>Arman</name></author><category term="nextjs" /><summary type="html"><![CDATA[I started a new Nextjs project (Nextjs 14.1.0). I added discord.js to be able send a message to a discord channel.]]></summary></entry><entry><title type="html">Why You Should Always Use Span for React.js Texts</title><link href="https://www.armannotes.com/2023/12/18/reactjs-text-handling-span/" rel="alternate" type="text/html" title="Why You Should Always Use Span for React.js Texts" /><published>2023-12-18T00:00:00+00:00</published><updated>2023-12-18T00:00:00+00:00</updated><id>https://www.armannotes.com/2023/12/18/reactjs-text-handling-span</id><content type="html" xml:base="https://www.armannotes.com/2023/12/18/reactjs-text-handling-span/"><![CDATA[<p>So I learned this the hard way…</p>
+
+<p>There is a translation service in almost every browser these days, which translates all the texts on a website to user-preferred language.</p>
+
+<p>Browsers (like Chrome) would replace a text with a <code class="language-plaintext highlighter-rouge">&lt;font&gt;</code> markup tag like this:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// original</span>
+<span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">Some</span> <span class="nx">Text</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>
+<span class="c1">// Translated</span>
+<span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">font</span> <span class="nx">style</span><span class="o">=</span><span class="dl">"</span><span class="s2">vertical-align: inherit;</span><span class="dl">"</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">font</span> <span class="nx">style</span><span class="o">=</span><span class="dl">"</span><span class="s2">vertical-align: inherit;</span><span class="dl">"</span><span class="o">&gt;</span><span class="nx">ä</span><span class="err">¸</span><span class="nx">äº</span><span class="err"></span><span class="nx">æ</span><span class="err"></span><span class="nx">å</span><span class="err">­</span><span class="o">&lt;</span><span class="sr">/font</span><span class="err">&gt;
+</span>  <span class="o">&lt;</span><span class="sr">/font</span><span class="err">&gt;
+</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>
+</code></pre></div></div>
+
+<p>And, this will ruin your DOM and therefore React.js would stop working. Mostly, if you have a condition before your text like this:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// this will throw error after browser auto-translate</span>
+<span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">checked</span> <span class="o">&amp;&amp;</span> <span class="dl">"</span><span class="s2">Some Text</span><span class="dl">"</span><span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>Most probably your user are going to get an error like below when their browser does the auto-translation, and believe me it’s really hard to know about this happening to your users or even to debug it.</p>
+
+<blockquote>
+  <p>Failed to execute ‘removeChild’ on ‘Node’: The node to be removed is not a child of this node.</p>
+</blockquote>
+
+<p>The node referenced by React is replaced completely with a <code class="language-plaintext highlighter-rouge">&lt;font&gt;</code> node, therefore reactjs cannot find that node anymore. hence the error above.</p>
+
+<h2 id="solution-1-disabling-the-auto-translate-not-recommended">Solution 1: Disabling the auto-translate (not recommended)</h2>
+
+<p>You can disable this feature for all of your users across the world with the following meta tag:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">meta</span> <span class="nx">name</span><span class="o">=</span><span class="dl">"</span><span class="s2">google</span><span class="dl">"</span> <span class="nx">content</span><span class="o">=</span><span class="dl">"</span><span class="s2">notranslate</span><span class="dl">"</span><span class="o">&gt;</span>
+
+</code></pre></div></div>
+
+<p>However, as you have already guessed, this is not good user experience and I wouldn’t recommend doing this.</p>
+
+<h2 id="solution-2-wrap-texts-with">Solution 2: Wrap texts with</h2>
+
+<p>This is what I have decided to do for my <a href="https://www.taranify.com">mood recommendation ai</a> web app. It’s easy and effective. All you need to do is to avoid using bare texts and Always Always Always put your texts in between <code class="language-plaintext highlighter-rouge">&lt;span&gt;&lt;/span&gt;</code> .</p>
+
+<p>This way, when Chrome or other browsers replace the text with nodes, the node around it stays the same and therefore react would not lose its reference to the node.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Correct way of using texts in Reactjs and Nextjs</span>
+<span class="p">{</span><span class="nx">condition</span> <span class="o">&amp;&amp;</span> <span class="o">&lt;</span><span class="nx">span</span><span class="o">&gt;</span><span class="nx">Welcome</span><span class="o">&lt;</span><span class="sr">/span&gt;</span><span class="err">}
+</span>
+</code></pre></div></div>
+
+<p><img src="https://raw.githubusercontent.com/armannaj/armannaj.github.io/master/img/F13xWbcAAcbv.png" alt="https://raw.githubusercontent.com/armannaj/armannaj.github.io/master/img/F13xWbcAAcbv.png" /></p>
+
+<p>You can read more about it on <a href="https://github.com/facebook/react/issues/11538#issuecomment-390386520">this React Github issue</a>.</p>
+
+<p>Voila! now you are going to have happy users from all over the world.</p>]]></content><author><name>Arman</name></author><category term="react" /><category term="reactjs" /><category term="nextjs" /><summary type="html"><![CDATA[So I learned this the hard way…]]></summary></entry><entry><title type="html">How to add cookie consent in Nextjs, Tailwind CSS and DaisyUI</title><link href="https://www.armannotes.com/2023/11/26/implement-cookie-consent-nextjs-tailwind-daisyui-guide/" rel="alternate" type="text/html" title="How to add cookie consent in Nextjs, Tailwind CSS and DaisyUI" /><published>2023-11-26T00:00:00+00:00</published><updated>2023-11-26T00:00:00+00:00</updated><id>https://www.armannotes.com/2023/11/26/implement-cookie-consent-nextjs-tailwind-daisyui-guide</id><content type="html" xml:base="https://www.armannotes.com/2023/11/26/implement-cookie-consent-nextjs-tailwind-daisyui-guide/"><![CDATA[<p>Cookie consent on websites refers to the practice of asking users for permission to collect and use their data through cookies.</p>
+
+<p>Cookies are small pieces of data stored on a user’s device when they visit a website. They are used for various purposes, such as tracking user activity, remembering login details, and personalizing content.</p>
+
+<p>Laws in various parts of the world, such as the General Data Protection Regulation (<em>GDPR</em>) in the European Union and the <em>ePrivacy</em> Directive, <em>LGPD</em> in Brazil, <em>POPIA</em> in South Africa require websites to obtain explicit consent from users before placing cookies on their devices. This is to protect user privacy and give them control over their personal data.</p>
+
+<p>To comply with these laws, websites, especially those with a global audience, even if a website is based outside of the EU, need to implement a clear and easily accessible cookie consent mechanism. This typically involves a popup or banner informing users about the use of cookies and requesting their consent.</p>
+
+<h2 id="how-to-implement-that-in-nextjs">How to Implement that in Nextjs</h2>
+
+<p>I use this NPM library:</p>
+
+<blockquote>
+  <p>npm install cookies-next</p>
+</blockquote>
+
+<p>This gives us two useful functions: <code class="language-plaintext highlighter-rouge">hasCookie</code> &amp; <code class="language-plaintext highlighter-rouge">setCookie</code>. In a top-level client-side layout page, I check if a consent cookie present or not. If not, I show the message to the user. Once the user accepts it, I save the consent cookie so that next time I don’t bother user and repeat this question again.</p>
+
+<p>Import these at top:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">hasCookie</span><span class="p">,</span> <span class="nx">setCookie</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">cookies-next</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Create this state:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="p">[</span><span class="nx">showConsent</span><span class="p">,</span> <span class="nx">setShowConsent</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>In useEffect method do this:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+   <span class="nx">setShowConsent</span><span class="p">(</span><span class="o">!</span><span class="nx">hasCookie</span><span class="p">(</span><span class="dl">"</span><span class="s2">cookieConsent</span><span class="dl">"</span><span class="p">));</span>
+  <span class="p">},</span> <span class="p">[]);</span>
+</code></pre></div></div>
+
+<p>In the return section add this JSX code:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="nx">showConsent</span> <span class="o">&amp;&amp;</span> <span class="p">(</span>
+        <span class="o">&lt;</span><span class="nx">Toast</span> <span class="nx">className</span><span class="o">=</span><span class="dl">"</span><span class="s2">z-50</span><span class="dl">"</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">Alert</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="dl">"</span><span class="s2">w-full flex-row justify-between gap-2</span><span class="dl">"</span><span class="o">&gt;</span>
+              <span class="o">&lt;</span><span class="nx">span</span><span class="o">&gt;</span>
+                <span class="nx">We</span> <span class="nx">use</span> <span class="nx">cookies</span> <span class="k">in</span> <span class="k">this</span> <span class="nx">website</span><span class="p">.</span>
+              <span class="o">&lt;</span><span class="sr">/span</span><span class="err">&gt;
+</span>            <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>            <span class="o">&lt;</span><span class="nx">Button</span> <span class="nx">size</span><span class="o">=</span><span class="dl">"</span><span class="s2">sm</span><span class="dl">"</span> <span class="nx">color</span><span class="o">=</span><span class="dl">"</span><span class="s2">primary</span><span class="dl">"</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+		<span class="nx">setCookie</span><span class="p">(</span><span class="dl">"</span><span class="s2">cookieConsent</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">true</span><span class="dl">"</span><span class="p">,</span> <span class="p">{});</span>
+		<span class="nx">setShowConsent</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+		<span class="p">}}</span><span class="o">&gt;</span>
+              <span class="nx">Accept</span>
+            <span class="o">&lt;</span><span class="sr">/Button</span><span class="err">&gt;
+</span>          <span class="o">&lt;</span><span class="sr">/Alert</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="sr">/Toast</span><span class="err">&gt;
+</span>      <span class="p">)}</span>
+</code></pre></div></div>
+
+<p>Voila! as simple as that.</p>
+
+<p><strong>Note:</strong> I’m using <a href="https://daisyui.com/">DaisyUI</a> which is a UI library on top of <a href="https://tailwindcss.com/">Tailwind CSS</a>. You can do the same with solely tailwind css as well.</p>]]></content><author><name>Arman</name></author><category term="next-js" /><category term="typescript" /><category term="javascript" /><category term="web-development" /><summary type="html"><![CDATA[Cookie consent on websites refers to the practice of asking users for permission to collect and use their data through cookies.]]></summary></entry><entry><title type="html">How to embed a tweet in GitHub Pages (2023)</title><link href="https://www.armannotes.com/2023/09/05/embed-tweet-in-github-pages/" rel="alternate" type="text/html" title="How to embed a tweet in GitHub Pages (2023)" /><published>2023-09-05T00:00:00+00:00</published><updated>2023-09-05T00:00:00+00:00</updated><id>https://www.armannotes.com/2023/09/05/embed-tweet-in-github-pages</id><content type="html" xml:base="https://www.armannotes.com/2023/09/05/embed-tweet-in-github-pages/"><![CDATA[<p>Although there are plugins for jekyll to do that, However it is not enabled in GitHub Pages due to security concerns.</p>
+
+<p>But there is still a way to do that:
+In order to embed a tweet in your markdown file for GitHub Pages, do this:</p>
+
+<ol>
+  <li>Open the tweet you want to embed in twitter (recently X.com):</li>
+  <li>Click on the <code class="language-plaintext highlighter-rouge">...</code> button on the top-right side of the tweet:
+<img src="https://www.armannotes.com/img/posts/embed-tweet-1.png" alt="How to embed a tweet in GitHub Pages - Step 1" /></li>
+  <li>Select <code class="language-plaintext highlighter-rouge">Embed Post</code>
+<img src="https://www.armannotes.com/img/posts/embed-tweet-2.png" alt="How to embed a tweet in GitHub Pages - Step 2" /></li>
+  <li>It opens that tweet in <code class="language-plaintext highlighter-rouge">publish.twitter.com</code> where you can copy the embed code
+<img src="https://www.armannotes.com/img/posts/embed-tweet-3.png" alt="How to embed a tweet in GitHub Pages - Step 3" /></li>
+  <li>Click <code class="language-plaintext highlighter-rouge">Copy Code</code> and copy this code directly in your <em>Markdown</em> file. You can paste a html blockquote in your markdown file, and it will be rendered exactly the same in your output HTML file.</li>
+</ol>
+
+<p>This is an example of the same tweet above, embedded here:</p>
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Which frontend or backend framework will make you instantly hireable? ð¤</p>&mdash; Arman ð» (@programmerByDay) <a href="https://twitter.com/programmerByDay/status/1698818446795145521?ref_src=twsrc%5Etfw">September 4, 2023</a></blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>There you go! As easy as that :)</p>]]></content><author><name>Arman</name></author><category term="blogging" /><summary type="html"><![CDATA[An easy way to embed tweets in GitHub Pages without security concerns]]></summary></entry><entry><title type="html">How to Embed Youtube Video in NextJs 13 Without SEO damage</title><link href="https://www.armannotes.com/2023/08/17/how-to-embed-youtube-video-in-nextjs-13-without-seo-damage/" rel="alternate" type="text/html" title="How to Embed Youtube Video in NextJs 13 Without SEO damage" /><published>2023-08-17T00:00:00+00:00</published><updated>2023-08-17T00:00:00+00:00</updated><id>https://www.armannotes.com/2023/08/17/how-to-embed-youtube-video-in-nextjs-13-without-seo-damage</id><content type="html" xml:base="https://www.armannotes.com/2023/08/17/how-to-embed-youtube-video-in-nextjs-13-without-seo-damage/"><![CDATA[<p>Youtube allows you to embed videos in your website. It is said that having a rich content (like a video) in your website can have a positive impact on your SEO score in the eyes of search engines like Google or Bing.</p>
+
+<p>So I created a video for my experimental <a href="https://www.taranify.com">Mood Recommendation AI</a>, and tried to embed it in my website. I used the code I got from youtube. It gave me this code:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;iframe
+   width="100%"
+   height="100%"
+   src="https://www.youtube.com/embed/jzx9bpFXSzE"
+   title="How Does Taranify Work?"
+   frameBorder="0"
+   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+   allowFullScreen
+   loading="lazy"
+&gt;&lt;/iframe&gt;
+</code></pre></div></div>
+
+<p>It’s very easy, but the problem was it affected my core web vitals heavily in <a href="https://pagespeed.web.dev/">PageSpeed tool</a>:</p>
+
+<p><img src="https://programmerbyday.files.wordpress.com/2023/08/taranify-mobile-perf-current-copy.png?w=1024" alt="" /></p>
+
+<p>The Total Blocking Time is ridiculously high and that’s because of all the scripts and contents that Youtube iframe is loading. I had even put <code class="language-plaintext highlighter-rouge">loading="lazy"</code> on iframe but it didn’t make much difference!</p>
+
+<h2 id="what-is-a-facade-for-third-party-embeds-">What is a Facade for Third-party Embeds ?</h2>
+
+<p>Third-party embeds (Youtube, Google maps, Vimeo, Social media, etc.) usually have some contents that are not crucial for end-user in the beginning.</p>
+
+<p>One way is to defer them with Lazy Loading, another way is to replace them with a static image that looks very similar to the actual embedded element. And when user actually needs it (such as clicking on it), we dynamically load the actual element.</p>
+
+<p>You can have a facade for an iFrame such as <a href="https://github.com/vb/lazyframe">lazyframe</a> , for a Youtube video such as <a href="https://github.com/paulirish/lite-youtube-embed">this</a> or <a href="https://github.com/justinribeiro/lite-youtube">this</a> , for Vimeo such as <a href="https://github.com/luwes/lite-vimeo-embed">this</a> , live chats , or even build your own facade with Javascript/Typescript.</p>
+
+<p>How I Used Facade for Youtube Embed in NextJs 13?</p>
+
+<p><a href="https://nextjs.org/blog/next-13">NextJs 13</a> introduced a new structure and ways of doing things. After searching and trying different npm packages, I decided to add <a href="https://github.com/ibrahimcesar/react-lite-youtube-embed">this package</a>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm i react-lite-youtube-embed
+</code></pre></div></div>
+<p>This package doesn’t add its CSS by default, so add this on top of your page:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
+</code></pre></div></div>
+<p>Then, embed your Youtube video like this:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;LiteYouTubeEmbed
+            id="jzx9bpFXSzE"
+            title="How Does Taranify Work?"
+            poster="maxresdefault"
+/&gt;
+</code></pre></div></div>
+<p>This is responsive by default and takes up 100% of width. Notice that I decided to use <code class="language-plaintext highlighter-rouge">poster="maxresdefault"</code> to load the facade image with the highest available resolution.</p>
+
+<p>After than, my core web vitals assessment is like this:</p>
+
+<p><img src="https://programmerbyday.files.wordpress.com/2023/08/tailwind-mobile-perf-8-yt-embed-facade-copy.png?w=1024" alt="" /></p>
+
+<p>Voila!</p>
+
+<p>It’s a huge improvement (2110 ms). The page is blazingly fast and in face for the first time I got this assessment result:</p>
+
+<p><img src="https://programmerbyday.files.wordpress.com/2023/08/screenshot-2023-08-16-at-8.03.03-pm.png?w=720" alt="" /></p>
+
+<p>Which made me to thank Chromium for PageSpeed tool in this tweet:</p>
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Such a satisfying feeling when I got this from PageSpeed for <a href="https://t.co/wPSr3BY3TE">https://t.co/wPSr3BY3TE</a> , Thank you <a href="https://twitter.com/ChromiumDev?ref_src=twsrc%5Etfw">@ChromiumDev</a> <a href="https://t.co/OgTwkVxnOj">pic.twitter.com/OgTwkVxnOj</a></p>&mdash; Arman ð» (@programmerByDay) <a href="https://twitter.com/programmerByDay/status/1691753073511895459?ref_src=twsrc%5Etfw">August 16, 2023</a></blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>Thanks for reading. I hope it’s been useful.</p>
+
+<p><a href="https://twitter.com/programmerByDay">Follow me on X</a> for more tips and knowledge sharings.</p>]]></content><author><name>Arman</name></author><category term="javascript" /><category term="javascript-framework" /><category term="next-js" /><category term="react" /><category term="typescript" /><category term="web-development" /><summary type="html"><![CDATA[Youtube allows you to embed videos in your website. It is said that having a rich content (like a video) in your website can have a positive impact on your SEO score in the eyes of search engines like Google or Bing.]]></summary></entry><entry><title type="html">Vertical Scaling vs. Horizontal Scaling: Explained Simply</title><link href="https://www.armannotes.com/2023/07/31/vertical-scaling-vs-horizontal-scaling-explained-simply/" rel="alternate" type="text/html" title="Vertical Scaling vs. Horizontal Scaling: Explained Simply" /><published>2023-07-31T00:00:00+00:00</published><updated>2023-07-31T00:00:00+00:00</updated><id>https://www.armannotes.com/2023/07/31/vertical-scaling-vs-horizontal-scaling-explained-simply</id><content type="html" xml:base="https://www.armannotes.com/2023/07/31/vertical-scaling-vs-horizontal-scaling-explained-simply/"><![CDATA[<p>Scalability is one of the aspects to make any system future-proof. In this blog post, I will share my learnings about what the scaling is in software deployment, the difference between vertical scaling and horizontal scaling, and when to use each one.</p>
+
+<h2 id="what-is-scaling">What is scaling?</h2>
+
+<p>An app or an API is useless unless it is deployed to a publicly available server. As you know, servers are computers with specifically designed hardware. These hardwares (CPU, Memory, Storage, processing units, GPUs, etc.) are designed to be switched on all the time, and endure under severe workloads and be durable. However, they have one drawback. They are not limitless. They can only process so much work, and when the workload is increased, they won’t be able to process in a timely manner. This is when scaling comes into the play.</p>
+
+<p>Scaling means increasing the capacity of a server with the goal of being able to process more requests/workloads. There are two ways of doing it.</p>
+
+<h2 id="vertical-scaling">Vertical Scaling</h2>
+
+<p>Vertical Scaling is when we swap a server’s hardwares with another hardware with higher capacity. For example, we swap the Memory or the storage to a bigger one. Or change the CPU with another one with more cores. When we change the server, in a way that it becomes bigger with more resources and capacity, this is called Vertical Scaling.</p>
+
+<p><img src="https://www.armannotes.com/img/vertical-scaling.png" alt="Vertical Scaling explained simply" /></p>
+
+<p>In today’s world, most of the servers are created using Virtual Machines. Virtual machines are configurables and therefore each parts of them (such as CPU or memory or storage) can be increased or decreased via a configuration setting.</p>
+
+<h2 id="horizontal-scaling">Horizontal Scaling</h2>
+
+<p>It is not always possible to add a bigger resource to a server. However, sometimes we might be able to increase the number of servers. When we increase the number of servers, in a way that they collectively process more requests, this is called Horizontal Scaling.</p>
+
+<p><img src="https://www.armannotes.com/img/horizontal-scaling-croped.png?w=686" alt="Horizontal Scaling explained simply" /></p>
+
+<p>As I said, most servers are deployed as Virtual Machines, and duplicating a virtual machine is a simple task these days. However, with more servers, comes more complexity. Requests need to be distributed among multiple servers. This is usually done by a load-balancer server that sits in front of all the servers to do this distribution.</p>
+
+<h2 id="vertical-scaling-vs-horizontal-scaling">Vertical Scaling vs. Horizontal Scaling</h2>
+
+<p>The are differences in terms of implementation, technicality, costs and etc. I’ve captured it in a simple table below:</p>
+
+<p><img src="https://www.armannotes.com/img/vertical%20vs%20horizontal%20scaling%20table.png" alt="Vertical Scaling vs. Horizontal Scaling" /></p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Vertical Scaling is when we increase the resources/hardwares in a single server, whereas Horizontal Scaling is when we increase the number of servers. Each has its own merits and pitfalls. I’d recommend leaning towards horizontal scaling for green field projects. Even if you are working on a legacy system, try to change it in a way that it is more deployable with horizontal scaling.</p>
+
+<p><img src="https://www.armannotes.com/img/scaling-compared.png?w=849" alt="Horizontal Scaling vs. Vertical Scaling compared in a simple image" /></p>]]></content><author><name>Arman</name></author><category term="api" /><category term="app-development" /><category term="devops" /><category term="scalability" /><category term="web-development" /><summary type="html"><![CDATA[Scalability is one of the aspects to make any system future-proof. In this blog post, I will share my learnings about what the scaling is in software deployment, the difference between vertical scaling and horizontal scaling, and when to use each one.]]></summary></entry><entry><title type="html">What is Reinforcement Learning and How it differs to Machine Learning?</title><link href="https://www.armannotes.com/2023/07/27/what-is-reinforcement-learning-and-how-it-differs-to-machine-learning/" rel="alternate" type="text/html" title="What is Reinforcement Learning and How it differs to Machine Learning?" /><published>2023-07-27T00:00:00+00:00</published><updated>2023-07-27T00:00:00+00:00</updated><id>https://www.armannotes.com/2023/07/27/what-is-reinforcement-learning-and-how-it-differs-to-machine-learning</id><content type="html" xml:base="https://www.armannotes.com/2023/07/27/what-is-reinforcement-learning-and-how-it-differs-to-machine-learning/"><![CDATA[<p>In a previous blog post, I discussed the <a href="https://armannotes.com/2023/03/27/the-difference-between-coding-machine-learning-and-deep-learning/">differences between Coding, Machine Learning, and Deep Learning</a>. Now, I will share my recent learnings about Reinforcement Learning (RL) and explore its distinct nature from the other AI branches.</p>
+
+<h2 id="machine-learning-vs-reinforcement-learning">Machine Learning vs. Reinforcement Learning</h2>
+
+<p>In Machine learning (ML), we have lots of inputs that have our desired output, but we don’t know how we can get to that output from these input data fields. ML analyzes this for us and finds some/best way to get from these input fields to our desired output. In simple terms, Machine learning is about finding a way to get from input data to a known output. ML looks for common patterns through lots of data to find this for us.</p>
+
+<p>In reinforcement learning (RL), things are different. Here we don’t have a lot of data, but instead we have a feedback function. The way it works is our AI agent starts with a random solution (a path from input data to a known output) and runs the feedback function on it. The feedback function returns a score (usually between 0 to 1), that tells the agent how desirable the solution is. If the solution is getting us closer to our desired output, then it is 1, otherwise it is 0 or a number between 0 and 1.</p>
+
+<h2 id="the-power-of-reinforcement-learning">The Power of Reinforcement Learning</h2>
+
+<p>The main difference in use case between machine learning and reinforcement learning is that in machine learning we must have a lot of data; however, in reinforcement learning we can start with a form of feedback function and no data. It can start from an absolute random position.</p>
+
+<p>RL agent will use this number to form its next iteration and does this many times. Over time, it will get closer and closer to the ideal solution.</p>
+
+<p>The feedback function allows us to explore multiple outputs as well. It can measure a given input against a set of possible outputs, and therefore with RL we don’t necessarily need to know the desired output. RL agent can find the best possible path from input to each of these outputs using the feedback function.</p>
+
+<p>P.S: This is only a high-level explanation.</p>
+
+<h2 id="what-are-some-of-the-examples-for-reinforcement-learning">What are some of the examples for reinforcement learning?</h2>
+
+<p>The unique characteristic of reinforcement learning allows it to excel in dynamic and complex scenarios, such as game playing, robotics, recommendation systems and autonomous systems, making it a distinctive and essential approach within these fields.</p>
+
+<p>Some Examples could be:</p>
+
+<ul>
+  <li>
+    <p><strong>Game Playing</strong>: Algorithms like Deep Q-Networks (DQN) and AlphaGo have demonstrated remarkable success in mastering games like board game Go. These agents learn from the game environment’s feedback (rewards) to improve their strategies and eventually achieve superhuman performance.</p>
+  </li>
+  <li><strong>Recommendation Systems</strong>: Reinforcement learning has been employed in recommendation systems to optimize the suggestions provided to users. For example, in online advertising, an RL-based recommendation engine might learn to display ads that lead to more user clicks and conversions, thereby maximizing the cumulative rewards. Some famous use cases are:
+    <ul>
+      <li>
+        <p>A system to recommend articles to users to increase their reading time on a news website (usually shown in ‘read more’ section).</p>
+      </li>
+      <li>
+        <p>A product recommendation system (products your might be interested in)</p>
+      </li>
+      <li>
+        <p>Finding the best place to show an ad to increase user engagement</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Navigation</strong>: RL enables robots to learn and adapt their behavior based on the feedback they receive from sensors and actuators. Self-driving cars and autonomous drones utilize reinforcement learning to make decisions on the road or in the air.</p>
+  </li>
+  <li>
+    <p><strong>Resource Management</strong>: Reinforcement learning is utilized in scenarios where efficient resource allocation is essential. For instance, in energy management, RL agents can learn to optimize energy consumption in smart grids, balancing the demand and supply to minimize costs and maintain a stable power supply.</p>
+  </li>
+  <li>Other examples include lots of other applications in various industries such as Finance, Automation, Natural Language Processing (NLP), and Healthcare.</li>
+</ul>
+
+<h2 id="what-is-apprentice-period-of-learning">What is Apprentice period of learning?</h2>
+
+<p>Every RL agent starts with zero data and information and takes random decisions. This could lead to a long learning time before it becomes any useful. The accuracy of this agent can be so random and aweful at first. In order to speed this phase, there can be a period of learning where the RL agent observes an expert or the current application’s logic and learns from it. This is called ‘apprentice learning mode’.</p>
+
+<p>In apprentice mode, the agent is given the input with the output chosen by current application or an expert. The agent learns this as the best-known output/action so far and builds on top of that.</p>
+
+<p>Note that, apprentice mode is not necessary and as I said above, an agent can start from absolutely nothing.</p>
+
+<h2 id="exploration-vs-exploitation-in-reinforcement-learning">Exploration vs Exploitation in Reinforcement Learning</h2>
+
+<p>Exploitation is when the agent returns the current known best action/output (for a given set of input). Exploration is when the agent takes a new and random set of action to learn from it. Exploration helps the agent not to get stuck in local maxima and find better ways to increase its cumulative rewards score.</p>
+
+<p>It is advised to have a trade-off between exploration vs exploitation. For example, 80% of the times agent can return known results, and in 20% of the times it uses randomization to learn more.</p>
+
+<h2 id="how-to-design-a-good-feedback-reward-function">How to design a good feedback reward function?</h2>
+
+<p>In RL, an agent interacts with an environment and takes actions to reach a specific objective. After each action, the environment provides feedback to the agent in the form of a reward signal. This reward signal represents the immediate feedback on the goodness or desirability of the agent’s action. The feedback can be positive (rewarding) or negative (penalizing), depending on whether the agent made progress toward its objective or deviated from it.</p>
+
+<p>However, designing a useful reward function can be challenging. If the ideal output is known, it can be easier to measure the distance of the current set of actions (solution) to the ideal case. However, in most of the systems where the agent needs to recommend something, it usually waits for a feedback from humans.</p>
+
+<p>For example, in an article recommendation system, the agent picks some articles and shows them to users. When a user clicks on them, this could be scored as a reward for the agent and guide it. On the other hand, if no user clicks on them, this shows the recommendations were not interesting enough, and that it is considered a negative score (penalty) for the agent.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Reinforcement Learning (RL) is an interesting branch of artificial intelligence. It can tackles problems with a different approach and can be used in scenarios where there is not known data available or the ideal output action is not known. The RL agent can explore various actions and use a reward function to get closer one-step-at-a-time to finding good/best outputs.</p>]]></content><author><name>Arman</name></author><category term="ai" /><category term="machine-learning" /><category term="reinforcement-learning" /><summary type="html"><![CDATA[In a previous blog post, I discussed the differences between Coding, Machine Learning, and Deep Learning. Now, I will share my recent learnings about Reinforcement Learning (RL) and explore its distinct nature from the other AI branches.]]></summary></entry></feed>
